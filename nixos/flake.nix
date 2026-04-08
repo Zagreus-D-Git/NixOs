@@ -17,9 +17,6 @@
       };
     in
     {
-      # ─────────────────────────────────────────────────────────────
-      # CONFIGURACIÓN NIXOS
-      # ─────────────────────────────────────────────────────────────
       nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
@@ -31,54 +28,44 @@
         ];
       };
 
-      # ─────────────────────────────────────────────────────────────
-      # DEV SHELLS
-      # ─────────────────────────────────────────────────────────────
       devShells.${system} = {
-
-        # Shell ML completo (PyTorch, CUDA, notebooks)
-        # Uso: nix develop
+        
+        # Shell ML completo (torch, CUDA, etc.)
         default = pkgs.mkShell {
           name = "llm-lab";
-
           packages = with pkgs; [
             python311
             uv
             git
             nvtopPackages.full
 
-            # ML stack - pre-compilado, no compila desde fuente
+            # ML stack - todas consistentes en Python 3.11
             python311Packages.torch-bin
             python311Packages.torchvision-bin
             python311Packages.transformers
             python311Packages.accelerate
             python311Packages.datasets
             python311Packages.sentencepiece
-            python311Packages.jupyterlab
+            python311Packages.jupyterlab  # Añadido para notebooks
 
-            # CUDA toolchain (para compilaciones si las necesitas)
+            # CUDA toolchain
             cudaPackages.cudatoolkit
             cudaPackages.cudnn
           ];
 
           shellHook = ''
             echo ""
-            echo "🚀 LLM Lab Dev Shell"
+            echo "🚀 LAB: Entorno de ML cargado"
             echo "🐍 Python: $(python3 --version)"
-            echo "🔥 PyTorch: $(python3 -c 'import torch; print(f\"{torch.__version__} | CUDA: {torch.cuda.is_available()}\")' 2>/dev/null || echo 'Verificando...')"
-            echo "💡 Comandos:"
-            echo "   uv pip install <paquete>     # Instalar adicionales"
-            echo "   jupyter lab                   # Notebooks"
-            echo "   nvidia-offload python script.py  # Forzar GPU"
+            echo "🔥 PyTorch: $(python3 -c 'import torch; print(f\"{torch.__version__} CUDA: {torch.cuda.is_available()}\")' 2>/dev/null || echo 'No detectado')"
+            echo "💡 Tip: Usa 'uv pip install <paquete>' para instalar adicionales"
             echo ""
           '';
         };
 
-        # Shell ligero para agentes (aider, herramientas CLI)
-        # Uso: nix develop .#agent
+        # Shell ligero para agentes
         agent = pkgs.mkShell {
           name = "agent-shell";
-
           packages = with pkgs; [
             python311
             uv
@@ -90,10 +77,10 @@
 
           shellHook = ''
             echo ""
-            echo "🤖 Agent Shell"
+            echo "🤖 AGENT: Entorno ligero listo"
             echo "🔨 Instalar aider: uv tool install aider-chat"
-            echo "🔗 Ollama API: http://localhost:11434"
-            echo "💡 Ejemplo: aider --model ollama/llama3.2:3b --no-auto-commits"
+            echo "🔗 Ollama: http://localhost:11434"
+            echo "💡 Comando: aider --model ollama/llama3.2:3b"
             echo ""
           '';
         };
