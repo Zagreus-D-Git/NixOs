@@ -36,18 +36,18 @@
         default = pkgs.mkShell {
           name = "llm-lab";
           packages = with pkgs; [
-            python3
+            python39
             uv
             git
             nvtopPackages.full
 
             # ML stack
-            python3Packages.torch-bin
-            python3Packages.torchvision-bin
-            python3Packages.transformers
-            python3Packages.accelerate
-            python3Packages.datasets
-            python3Packages.sentencepiece
+            python39Packages.torch-bin
+            python39Packages.torchvision-bin
+            python39Packages.transformers
+            python39Packages.accelerate
+            python39Packages.datasets
+            python39Packages.sentencepiece
 
             # CUDA toolchain
             cudaPackages.cudatoolkit
@@ -57,8 +57,8 @@
           shellHook = ''
             echo ""
             echo "🚀 LAB: Entorno de ML cargado"
-            echo "🐍 Python: $(python3 --version)"
-            echo "📟 CUDA: $(python3 -c 'import torch; print(torch.cuda.is_available())' 2>/dev/null || echo 'No detectado')"
+            echo "🐍 Python: $(python39 --version)"
+            echo "📟 CUDA: $(python39 -c 'import torch; print(torch.cuda.is_available())' 2>/dev/null || echo 'No detectado')"
             echo "💡 Tip: Si usas el modo on-the-go, usa 'nvidia-offload python <script>'"
             echo ""
           '';
@@ -69,7 +69,7 @@
         agent = pkgs.mkShell {
           name = "agent-shell";
           packages = with pkgs; [
-            python3
+            python39
             uv
             git
             jq
