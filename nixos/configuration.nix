@@ -161,4 +161,11 @@
   services.journald.extraConfig = "Storage=persistent\nCompress=yes\nSystemMaxUse=2G";
   
   system.stateVersion = "25.11";
+
+  # ── Python Environment ───────────────────────────────────────────
+  environment.systemPackages += with pkgs; [
+    python39Packages.torch-bin
+    python39Packages.transformers
+    python39Packages.pytorch-lightning
+  ];
 }
