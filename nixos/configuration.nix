@@ -28,16 +28,11 @@
   time.timeZone = "America/Mexico_City";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # ── Desktop ───────────────────────────────────────────────────
-  services.xserver.enable = true;
-  services.xserver.xkb = { layout = "us"; variant = ""; };
-  services.displayManager.sddm.enable = true;
-  
-  # 🔥 FORZAR X11 (Wayland roto con NVIDIA PRIME)
-  services.displayManager.sddm.wayland.enable = false;
-  services.displayManager.defaultSession = "plasmax11";
-  
-  services.desktopManager.plasma6.enable = true;
+  # ── Desktop Environment (Plasma 6 / Wayland) ──────────────────────
+services.xserver.enable = true;
+services.xserver.xkb = { layout = "us"; variant = ""; };
+services.displayManager.sddm.enable = true;
+services.desktopManager.plasma6.enable = true;
 
   # NVIDIA primero para HDMI, AMD disponible
   services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
@@ -78,13 +73,11 @@
     };
   };
 
-  # ── Environment ─────────────────────────────────────────────
-  # Variables X11 (no Wayland)
-  environment.sessionVariables = {
-    # Desactivar hints de Wayland
-    QT_QPA_PLATFORM = "xcb";  # Forzar X11 para Qt
-    SDL_VIDEODRIVER = "x11";
-  };
+  # ── System Environment & Variables ────────────────────────────────
+environment.variables = {
+  NIXOS_OZONE_WL = "1";    # Necesario para Brave/Spotify y apps Electron
+  QT_QPA_PLATFORM = "wayland";
+};
 
   # ── Packages del Sistema (SIN Python ML) ──────────────────────
   # Python base (sin ML stack)
@@ -94,7 +87,7 @@
     ripgrep fd bat eza fzf jq pciutils
     
     # Python base (3.11 para general uso)
-    python311
+    python3
     uv       # Gestor de paquetes Python
     
     # GPU/Diagnóstico
