@@ -3,7 +3,9 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # ── Nix Settings ──────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # NIX & SISTEMA
+  # ───────────────────────────────────────────────────────────────
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nix.gc = {
@@ -17,43 +19,59 @@
     cudaSupport = true;
   };
 
-  # ── Bootloader & Kernel ───────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # BOOT & KERNEL
+  # ───────────────────────────────────────────────────────────────
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Forzamos la carga de drivers para evitar que el HDMI "duerma" al bootear
-  boot.kernelModules = [ "amdgpu" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelModules = [
+    "amdgpu"
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
 
-  boot.kernelParams = [ 
-    "nvidia-drm.modeset=1" 
-    "nvidia-drm.fbdev=1" 
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+    "nvidia-drm.fbdev=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
 
-  # ── Networking ────────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # RED & SEGURIDAD
+  # ───────────────────────────────────────────────────────────────
   networking.hostName = "vivobook-lab";
   networking.networkmanager.enable = true;
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 11434 ]; # SSH + Ollama API
+    allowedTCPPorts = [ 22 11434 ];  # SSH + Ollama API
   };
 
-  # ── Locale & Time ─────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # LOCALIZACIÓN
+  # ───────────────────────────────────────────────────────────────
   time.timeZone = "America/Mexico_City";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # ── Desktop Environment (Plasma 6 / Wayland) ──────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # ESCRITORIO (X11 - estable para NVIDIA)
+  # ───────────────────────────────────────────────────────────────
   services.xserver.enable = true;
   services.xserver.xkb = { layout = "us"; variant = ""; };
+
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Prioridad NVIDIA para asegurar salida HDMI activa
+  # NVIDIA primario para HDMI, AMD disponible
   services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
 
-  # ── Graphics & NVIDIA PRIME ───────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # GPU & NVIDIA PRIME
+  # ───────────────────────────────────────────────────────────────
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -61,23 +79,25 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    open = true; # Open kernel modules (RTX 3070)
+    open = true;  # RTX 3070 - recomendado por NVIDIA 560+
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     powerManagement = {
       enable = true;
-      finegrained = false; # Desactivado en Lab para evitar desconexión de HDMI
+      finegrained = false;  # Desactivado: HDMI estable, NVIDIA siempre lista
     };
 
     prime = {
-      sync.enable = true; # Modo Nuclear: NVIDIA renderiza, HDMI garantizado
-      amdgpuBusId = "PCI:231:0:0";
-      nvidiaBusId = "PCI:1:0:0";
+      sync.enable = true;  # Modo Lab: NVIDIA renderiza todo
+      amdgpuBusId = "PCI:231:0:0";  # e7:00.0 → 231
+      nvidiaBusId = "PCI:1:0:0";    # 01:00.0 → 1
     };
   };
 
-  # Especialización para uso portátil (más batería, sin HDMI)
+  # ───────────────────────────────────────────────────────────────
+  # ESPECIALIZACIÓN: MODO PORTÁTIL (batería)
+  # ───────────────────────────────────────────────────────────────
   specialisation = {
     on-the-go.configuration = {
       system.nixos.tags = [ "on-the-go" ];
@@ -92,22 +112,38 @@
     };
   };
 
-  # ── System Environment & Variables ────────────────────────────────
-  environment.variables = {
-    NIXOS_OZONE_WL = "1";    # Fix para apps Electron en Wayland
-    QT_QPA_PLATFORM = "wayland";
+  # ───────────────────────────────────────────────────────────────
+  # VARIABLES DE ENTORNO (X11)
+  # ───────────────────────────────────────────────────────────────
+  environment.sessionVariables = {
+    QT_QPA_PLATFORM = "xcb";  # Forzar X11 para Qt
+    SDL_VIDEODRIVER = "x11";
   };
 
+  # ───────────────────────────────────────────────────────────────
+  # PAQUETES DEL SISTEMA (INFRAESTRUCTURA - SIN PYTHON ML)
+  # ───────────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    # Infra & Core
+    # Core
     vim neovim wget curl git htop btop tmux
-    ripgrep fd bat eza fzf jq pciutils uv python3
-    
-    # Media & Desktop
-    brave spotify ffmpeg imagemagick docker-compose
+
+    # Utils
+    ripgrep fd bat eza fzf jq pciutils
+
+    # Python base (versión sistema)
+    python3
+    uv
+
+    # GPU/Diagnóstico
     nvtopPackages.full
 
-    # PRIME Offload Wrapper (útil en modo on-the-go)
+    # Media/Desktop
+    brave spotify ffmpeg imagemagick
+
+    # Containers
+    docker-compose
+
+    # Wrapper PRIME (útil en modo on-the-go)
     (writeShellScriptBin "nvidia-offload" ''
       export __NV_PRIME_RENDER_OFFLOAD=1
       export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -115,17 +151,26 @@
       export __VK_LAYER_NV_optimus=NVIDIA_only
       exec "$@"
     '')
+
+    # NOTA: ollama CLI está disponible vía services.ollama
+    # NOTA: aider-chat se instala vía 'uv tool install aider-chat' en devShell
   ];
 
-  # ── Services (LLM, Docker, Audio) ─────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # SERVICIOS
+  # ───────────────────────────────────────────────────────────────
+
+  # Ollama: LLM local con CUDA
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda;
   };
 
+  # Docker con NVIDIA
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
+  # Audio
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -134,6 +179,7 @@
   };
   security.rtkit.enable = true;
 
+  # SSH
   services.openssh = {
     enable = true;
     settings = {
@@ -142,38 +188,40 @@
     };
   };
 
+  # Periféricos
   services.printing.enable = true;
   hardware.bluetooth.enable = true;
+
+  # Power management (perfiles manuales)
   services.power-profiles-daemon.enable = true;
 
-  # ── User Account ──────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # USUARIO
+  # ───────────────────────────────────────────────────────────────
   users.users.zagreus = {
     isNormalUser = true;
     description = "Zagreus";
-    extraGroups = [ "wheel" "networkmanager" "video" "docker" "ollama" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "docker"
+      "ollama"
+    ];
     packages = with pkgs; [
       kdePackages.kate
       kdePackages.konsole
     ];
   };
 
-  # ── Maintenance & Logs ───────────────────────────────────────────
-  services.journald.extraConfig = "Storage=persistent\nCompress=yes\nSystemMaxUse=2G";
-  
+  # ───────────────────────────────────────────────────────────────
+  # LOGS & MANTENIMIENTO
+  # ───────────────────────────────────────────────────────────────
+  services.journald.extraConfig = ''
+    Storage=persistent
+    Compress=yes
+    SystemMaxUse=2G
+  '';
+
   system.stateVersion = "25.11";
-
-  # ── Python Environment ───────────────────────────────────────────
-  environment.systemPackages += with pkgs; [
-    python39Packages.torch-bin
-    python39Packages.transformers
-    python39Packages.pytorch-lightning
-  ];
-
-  # Ensure the correct version of PyTorch is used if needed
-  environment.systemPackages += with pkgs; [
-    (python39Packages.torch-bin.override {
-      version = "1.12.1";
-      sha256 = "..."; # Replace with the actual SHA-256 hash for the specified version
-    })
-  ];
 }
