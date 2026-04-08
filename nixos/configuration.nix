@@ -168,4 +168,12 @@
     python39Packages.transformers
     python39Packages.pytorch-lightning
   ];
+
+  # Ensure the correct version of PyTorch is used if needed
+  environment.systemPackages += with pkgs; [
+    (python39Packages.torch-bin.override {
+      version = "1.12.1";
+      sha256 = "..."; # Replace with the actual SHA-256 hash for the specified version
+    })
+  ];
 }
