@@ -19,59 +19,51 @@
     {
       nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [
-          ./configuration.nix
-          {
-            nixpkgs.config.allowUnfree = true;
-            nixpkgs.config.cudaSupport = true;
-          }
-        ];
+        modules = [ ./configuration.nix ];
       };
 
       devShells.${system} = {
-        
-        # Shell ML completo (torch, CUDA, etc.)
+        # ── Shell ML completo (torch, CUDA, etc.) ──────────────────────
+        # Se entra con: nix develop
         default = pkgs.mkShell {
           name = "llm-lab";
           packages = with pkgs; [
-            python3
+            python312
             uv
             git
             nvtopPackages.full
 
-            # ML stack - todas consistentes en Python con alias
-            python3Packages.torch-bin
-            python3Packages.torchvision-bin
-            python3Packages.transformers
-            python3Packages.accelerate
-            python3Packages.datasets
-            python3Packages.sentencepiece
-            python3Packages.jupyterlab  # Añadido para notebooks
+            # ML stack binario (Cacheado para 3.12)
+            python312Packages.torch-bin
+            python312Packages.torchvision-bin
+            python312Packages.transformers
+            python312Packages.accelerate
+            python312Packages.datasets
+            python312Packages.sentencepiece
+            python312Packages.jupyterlab
 
-            # CUDA toolchain binarios nvidia, solo descarga
-            cudaPackages.cudatoolkit
-            cudaPackages.cudnn
+            # CUDA (Descarga de binarios NVIDIA)
+            cudaPackages_12.cudatoolkit
+            cudaPackages_12.cudnn
           ];
 
           shellHook = ''
-            export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
-            # Ayuda a PyTorch a encontrar las libs de NVIDIA en NixOS
-            export LD_LIBRARY_PATH=${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses}/lib:$LD_LIBRARY_PATH
+            export CUDA_PATH=${pkgs.cudaPackages_12.cudatoolkit}
+            export LD_LIBRARY_PATH=${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses}/lib:${pkgs.cudaPackages_12.cudatoolkit}/lib:$LD_LIBRARY_PATH
 
             echo ""
-            echo "🚀 LAB: Entorno de ML cargado (Python 3.12 + CUDA)"
-            echo "🐍 Python: $(python3 --version)"
-            echo "🔥 PyTorch: $(python3 -c 'import torch; print(f\"{torch.__version__} CUDA: {torch.cuda.is_available()}\")' 2>/dev/null || echo 'No detectado')"
-            echo "💡 Tip: Usa 'uv pip install <paquete>' para extras"
+            echo "🚀 LAB: Entorno ML (Python 3.12 + CUDA 12)"
+            echo "🔥 PyTorch: $(python3 -c 'import torch; print(f\"{torch.__version__} CUDA: {torch.cuda.is_available()}\")' 2>/dev/null || echo 'Error en carga')"
             echo ""
           '';
         };
 
         # ── Shell ligero para agentes ──────────────────────────────────
+        # Se entra con: nix develop .#agent
         agent = pkgs.mkShell {
           name = "agent-shell";
           packages = with pkgs; [
-            python3
+            python312
             uv
             git
             jq
@@ -81,9 +73,10 @@
 
           shellHook = ''
             echo ""
-            echo "🤖 AGENT: Entorno ligero listo"
+            echo "🤖 AGENT: Entorno ligero listo (Python 3.12)"
             echo "🔨 Instalar aider: uv tool install aider-chat"
             echo "🔗 Ollama: http://localhost:11434"
+            echo "💡 Comando: aider --model ollama/llama3.2:3b"
             echo ""
           '';
         };

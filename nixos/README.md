@@ -245,7 +245,7 @@ Issue: Long build times / compilation
 Never use python3Packages.torch (builds from source, 4+ hours).
 Always use python3Packages.torch-bin (pre-built binary with CUDA).
 If you see compilation:
-Check you're using -bin variants
+Check you are using -bin variants
 Verify cudaSupport = true in flake config
 Clear cache: rm -rf ~/.cache/nix/
 Issue: Switching between laptop and external monitor
