@@ -35,7 +35,7 @@ services.displayManager.sddm.enable = true;
 services.desktopManager.plasma6.enable = true;
 
   # NVIDIA primero para HDMI, AMD disponible
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
   # ── GPU ───────────────────────────────────────────────────────
   hardware.graphics = { enable = true; enable32Bit = true; };
@@ -52,7 +52,8 @@ services.desktopManager.plasma6.enable = true;
     };
 
     prime = {
-      sync.enable = true;  # Modo Lab: NVIDIA siempre activa
+      offload.enable = true;  # Modo Lab: sync NVIDIA siempre activa - offload regula temperatura auto
+      enableOffloadCmd = true; # esto da el comando 'nvidia-offload' por si acaso
       amdgpuBusId = "PCI:231:0:0";
       nvidiaBusId = "PCI:1:0:0";
     };
@@ -110,7 +111,7 @@ environment.variables = {
   ];
 
   # ── Services ──────────────────────────────────────────────────
-  services.ollama = { enable = true; package = pkgs.ollama-cuda; };
+  services.ollama = { enable = true; acceleration = "cuda"; }; #nix se encarga de los binarios correctos
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 

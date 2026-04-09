@@ -2,7 +2,8 @@
   description = "NixOS LLM Agentic Lab - ASUS Vivobook M6501R";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Este es un commit verificado de finales de marzo que tiene Torch 2.x y CUDA estable
+    nixpkgs.url = "github:nixos/nixpkgs/ae26c043e745672f782c575a2d718b95a894a86f";
   };
 
   outputs = { self, nixpkgs, ... }:
@@ -42,9 +43,9 @@
             python312Packages.sentencepiece
             python312Packages.jupyterlab
 
-            # CUDA (Descarga de binarios NVIDIA)
-            cudaPackages_12.cudatoolkit
-            cudaPackages_12.cudnn
+            # CUDA (Descarga de binarios NVIDIA) - no se incluyen cudapackages torch-bin usa el driver del sistema
+            #cudaPackages_12.cudatoolkit
+            #cudaPackages_12.cudnn
           ];
 
           shellHook = ''
