@@ -34,7 +34,7 @@ services.xserver.xkb = { layout = "us"; variant = ""; };
 services.displayManager.sddm.enable = true;
 services.desktopManager.plasma6.enable = true;
 
-  # NVIDIA primero para HDMI, AMD disponible
+  # nvidia was first due to HDMI reckon but left with modesetting for amd to manage base system
   services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
   # ── GPU ───────────────────────────────────────────────────────
@@ -52,14 +52,16 @@ services.desktopManager.plasma6.enable = true;
     };
 
     prime = {
-      offload.enable = true;  # Modo Lab: sync NVIDIA siempre activa - offload regula temperatura auto
-      enableOffloadCmd = true; # esto da el comando 'nvidia-offload' por si acaso
+      offload = {
+      enable = true;  # Modo Lab: sync NVIDIA always active - offload heat regulation auto
+      enableOffloadCmd = true; # this gives command 'nvidia-offload' just in case
+      };
       amdgpuBusId = "PCI:231:0:0";
       nvidiaBusId = "PCI:1:0:0";
     };
   };
 
-  # Especialización para batería (on-the-go)
+  # specialisation for battery (on-the-go)
   specialisation = {
     on-the-go.configuration = {
       system.nixos.tags = [ "on-the-go" ];
@@ -76,7 +78,7 @@ services.desktopManager.plasma6.enable = true;
 
   # ── System Environment & Variables ────────────────────────────────
 environment.variables = {
-  NIXOS_OZONE_WL = "1";    # Necesario para Brave/Spotify y apps Electron
+  NIXOS_OZONE_WL = "1";    # needed for Brave/Spotify n apps Electron
   QT_QPA_PLATFORM = "wayland";
 };
 
@@ -111,7 +113,7 @@ environment.variables = {
   ];
 
   # ── Services ──────────────────────────────────────────────────
-  services.ollama = { enable = true; acceleration = "cuda"; }; #nix se encarga de los binarios correctos
+  services.ollama = { enable = true; package = pkgs.ollama-cuda; }; #correcto para NixOS 25.11 acceleration no longer available :(
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 

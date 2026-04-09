@@ -3,7 +3,7 @@
 
   inputs = {
     # Este es un commit verificado de finales de marzo que tiene Torch 2.x y CUDA estable
-    nixpkgs.url = "github:nixos/nixpkgs/ae26c043e745672f782c575a2d718b95a894a86f";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = { self, nixpkgs, ... }:
@@ -20,7 +20,12 @@
     {
       nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [ ./configuration.nix ];
+        modules = [ ./configuration.nix
+        {
+        nixpkgs.config.allowUnfree = true;
+        nixpkgs.config.cudaSupport = true;
+        }
+        ];
       };
 
       devShells.${system} = {
