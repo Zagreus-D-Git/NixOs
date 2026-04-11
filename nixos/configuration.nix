@@ -77,6 +77,11 @@
     nvtopPackages.full
     brave spotify ffmpeg imagemagick
     docker-compose
+    heroic
+    vlc
+    nix-du
+    ncdu
+    dust
   ];
 
   # ── Servicios ─────────────────────────────────────────────────
