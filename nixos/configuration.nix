@@ -1,7 +1,7 @@
 { config, pkgs, lib,... }:
 
 {
-  imports = [./hardware-configuration.nix ];
+  imports = [./hardware-configuration.nix ./modules/pentest];
 
   # ── Nix + cachés ──────────────────────────────────────────────
   nix.settings = {
@@ -14,17 +14,25 @@
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZBuZc3DkeT6xjo="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
+    auto-optimise-store = true;   # deduplica en cada build
+    min-free = 15 * 1024 * 1024;  # 15GB (tu valor era 15MB)
+    max-free = 30 * 1024 * 1024;  # 30GB (tu valor era 30MB)
+    keep-outputs = false;
+    keep-derivations = false;  # era "keep-derivation" singular, ahora plural
   };
-  nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 14d"; };
+  nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 7d"; };
+
 
   # solo unfree, NADA de cudaSupport global
   nixpkgs.config.allowUnfree = true;
 
   # ── Boot ──────────────────────────────────────────────────────
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest; # quieres bleeding edge
   boot.kernelParams = [ "nvidia-drm.modeset=1" "nvidia-drm.fbdev=1" ];
+  boot.tmp.cleanOnBoot = true;
 
   # ── Red ───────────────────────────────────────────────────────
   networking.hostName = "vivobook-lab";
@@ -78,6 +86,7 @@
     brave spotify ffmpeg imagemagick
     docker-compose
     heroic
+    steam
     vlc
     nix-du
     ncdu
