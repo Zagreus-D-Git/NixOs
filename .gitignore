@@ -2,9 +2,15 @@
 result
 result-*
 
-# Python venvs
+# Symlink local, no versionar
+nixos-config
+
+# Knowledge base persistente
+llm-agentic-lab/knowledge/
+
+# Python y aider
 .venv/
 .venv-agent/
-
-# Knowledge Base persistente, no versionar nada dentro
-llm-agentic-lab/knowledge/
+__pycache__/
+.aider*
+*.swp
