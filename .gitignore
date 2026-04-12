@@ -1,4 +1,10 @@
-.aider*
+# Nix
+result
+result-*
 
-# Knowledge Base persistente, no versionar
+# Python venvs
+.venv/
+.venv-agent/
+
+# Knowledge Base persistente, no versionar nada dentro
 llm-agentic-lab/knowledge/
