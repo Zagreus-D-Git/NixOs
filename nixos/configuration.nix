@@ -91,6 +91,7 @@
     nix-du
     ncdu
     dust
+    flameshot
   ];
 
   # ── Servicios ─────────────────────────────────────────────────
