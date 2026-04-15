@@ -18,3 +18,5 @@ __pycache__/
 # OpenClaw RAG - ignore data, keep schema
 kb/*.db
 kb/*.db-*
+.venv
+.venv-agent
