@@ -14,3 +14,7 @@ llm-agentic-lab/knowledge/
 __pycache__/
 .aider*
 *.swp
+
+# OpenClaw RAG - ignore data, keep schema
+kb/*.db
+kb/*.db-*
