@@ -1,7 +1,9 @@
 { config, pkgs, lib,... }:
 
 {
-  imports = [./hardware-configuration.nix ./modules/pentest ./modules/openclaw];
+  imports = [./hardware-configuration.nix ./modules/pentest
+  #./modules/openclaw desactivado por input missing
+  ];
 
   # ── Nix + cachés ──────────────────────────────────────────────
   nix.settings = {
@@ -15,8 +17,8 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
     auto-optimise-store = true;   # deduplica en cada build
-    min-free = 15 * 1024 * 1024;  # 15GB (tu valor era 15MB)
-    max-free = 30 * 1024 * 1024;  # 30GB (tu valor era 30MB)
+    min-free = 5 * 1024 * 1024 * 1024;   # 5 GiB libres mínimo en disco
+    max-free = 10 * 1024 * 1024 * 1024;  # intenta dejar 10 GiB libres
     keep-outputs = false;
     keep-derivations = false;  # era "keep-derivation" singular, ahora plural
   };
@@ -101,7 +103,7 @@
     host = "127.0.0.1"; # solo local
     port = 11434;
   };
-  services.openclaw.enable = true;
+  #services.openclaw.enable = true; # desactivado hasta proveer paquete
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
