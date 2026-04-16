@@ -1,9 +1,7 @@
 { config, pkgs, lib,... }:
 
 {
-  imports = [./hardware-configuration.nix ./modules/pentest
-  #./modules/openclaw desactivado por input missing
-  ];
+  imports = [./hardware-configuration.nix ./modules/pentest ./modules/openclaw ];
 
   # ── Nix + cachés ──────────────────────────────────────────────
   nix.settings = {
@@ -103,7 +101,7 @@
     host = "127.0.0.1"; # solo local
     port = 11434;
   };
-  #services.openclaw.enable = true; # desactivado hasta proveer paquete
+  services.openclaw.enable = true; # desactivado hasta proveer paquete
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
