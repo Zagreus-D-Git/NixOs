@@ -1,7 +1,7 @@
 { config, pkgs, lib,... }:
 
 {
-  imports = [./hardware-configuration.nix ./modules/pentest];
+  imports = [./hardware-configuration.nix ./modules/pentest ./modules/openclaw];
 
   # ── Nix + cachés ──────────────────────────────────────────────
   nix.settings = {
@@ -101,6 +101,7 @@
     host = "127.0.0.1"; # solo local
     port = 11434;
   };
+  services.openclaw.enable = true;
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
