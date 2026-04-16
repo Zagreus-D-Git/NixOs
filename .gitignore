@@ -20,3 +20,5 @@ kb/*.db
 kb/*.db-*
 .venv
 .venv-agent
+kb/rss/*.xml
+*.bak*
