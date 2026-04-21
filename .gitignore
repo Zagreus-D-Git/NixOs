@@ -22,3 +22,5 @@ kb/*.db-*
 .venv-agent
 kb/rss/*.xml
 *.bak*
+kb/tools/*.sh
+kb/tools/*.py
