@@ -5,14 +5,14 @@ let
   kbPath = "/home/zagreus/nixos-config/kb";
 
   agentPkgs = with pkgs; [
-    uv aider-chat ollama curl jq git
+    uv curl jq git
     (python312.withPackages (ps: with ps; [
       chromadb
       sentence-transformers
       pytest
       ruff
       pypdf
-      requests  # Para llamar a OpenClaw proxy
+
     ]))
   ];
 in {
