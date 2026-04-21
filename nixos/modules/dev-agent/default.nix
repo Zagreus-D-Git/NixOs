@@ -27,8 +27,8 @@ in {
   ];
 
   # Firewall: Agent can ONLY reach Ollama
-  networking.firewall.extraCommands = ''
-    iptables -A OUTPUT -m owner --uid-owner $(id -u jailer) -d 127.0.0.1 -p tcp --dport 11434 -j ACCEPT
-    iptables -A OUTPUT -m owner --uid-owner $(id -u jailer) -j REJECT
-  '';
+ # networking.firewall.extraCommands = ''
+ #   iptables -A OUTPUT -m owner --uid-owner $(id -u jailer) -d 127.0.0.1 -p tcp --dport 11434 -j ACCEPT
+  #  iptables -A OUTPUT -m owner --uid-owner $(id -u jailer) -j REJECT
+ # '';
 }
