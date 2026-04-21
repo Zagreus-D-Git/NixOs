@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/pentest
+    #./modules/pentest #deprecated duplicated isolation
     ./modules/openclaw
     ./modules/dev-agent
 
