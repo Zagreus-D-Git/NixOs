@@ -1,7 +1,13 @@
 { config, pkgs, lib,... }:
 
 {
-  imports = [./hardware-configuration.nix ./modules/pentest ./modules/openclaw ];
+  imports = [
+    ./hardware-configuration.nix
+    ./modules/pentest
+    ./modules/openclaw
+    ./modules/dev-agent
+
+  ];
 
   # ── Nix + cachés ──────────────────────────────────────────────
   nix.settings = {
