@@ -7,7 +7,7 @@
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-    devShells = import ./dev/llm-lab.nix { inherit pkgs; };
+    devShells = import ./nixos/modules/llm-lab.nix { inherit pkgs; };
   in {
     nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
       inherit system;

@@ -1,5 +1,5 @@
 { pkgs }:
-let cuda = pkgs.cudaPackages;
+let cuda = pkgs.cudaPackages_12;
 in {
   llm-lab = pkgs.mkShell {
     name = "llm-lab";
