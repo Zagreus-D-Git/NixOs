@@ -11,7 +11,10 @@
   in {
     nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
       inherit system;
-      modules = [ ./nixos/configuration.nix ];
+      modules = [
+        ./nixos/configuration.nix           #config base limpia
+        ./nixos/modules/gaming/gaming.nix   #nueva expecializacion
+      ];
     };
 
     devShells.${system} = devShells;
