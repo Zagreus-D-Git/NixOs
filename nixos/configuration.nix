@@ -6,6 +6,7 @@
     ./modules/pentest
     ./modules/openclaw
     ./modules/dev-agent
+    ./modules/kairos-proxy
 
   ];
 
@@ -111,6 +112,8 @@
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
+  services.kairos-proxy.enable = true;
+
   services.pipewire = { enable = true; alsa.enable = true; alsa.support32Bit = true; pulse.enable = true; };
   security.rtkit.enable = true;
   services.openssh = { enable = true; settings = { PermitRootLogin = "prohibit-password"; PasswordAuthentication = false; }; };
@@ -128,3 +131,5 @@
   services.journald.extraConfig = "Storage=persistent\nCompress=yes\nSystemMaxUse=2G";
   system.stateVersion = "25.11";
 }
+
+
