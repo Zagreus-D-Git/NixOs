@@ -18,3 +18,5 @@ __pycache__/
 # Temporales
 *.bak*
 *.log
+.flake.nix.swp
+nixos/.venv-agent/
