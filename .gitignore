@@ -1,26 +1,20 @@
-# Nix
-result
+# Nix build outputs
 result-*
 
-# Symlink local, no versionar
-nixos-config
+# Knowledge base - NUNCA versionar datos
+kb/
+!kb/.gitkeep
 
-# Knowledge base persistente
-llm-agentic-lab/knowledge/
-
-# Python y aider
+# Python venvs
 .venv/
 .venv-agent/
 __pycache__/
+
+# Aider y editores
 .aider*
 *.swp
+*~
 
-# OpenClaw RAG - ignore data, keep schema
-kb/*.db
-kb/*.db-*
-.venv
-.venv-agent
-kb/rss/*.xml
+# Temporales
 *.bak*
-kb/tools/*.sh
-kb/tools/*.py
+*.log
