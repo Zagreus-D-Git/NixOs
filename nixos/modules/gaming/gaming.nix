@@ -20,7 +20,7 @@
       heroic
       steam
       mangohud
-      protonup-qt
+      proton-plus
     ];
 
     # Configuración de Steam específica
