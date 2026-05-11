@@ -12,8 +12,9 @@
     nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
-        ./nixos/configuration.nix           #config base limpia
-        ./nixos/modules/gaming/gaming.nix   #nueva expecializacion
+        ./nixos/configuration.nix                     #config base limpia
+        ./nixos/modules/gaming/gaming.nix             #nueva expecializacion
+          ./nixos/modules/desktop/video-wallpaper.nix #video wallpaper
       ];
     };
 
