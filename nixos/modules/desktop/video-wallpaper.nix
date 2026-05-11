@@ -19,7 +19,7 @@ in
       Restart = "on-failure";
       RestartSec = 5;
     };
-    installConfig.WantedBy = [ "graphical-session.target" ];
+    wantedBy = [ "graphical-session.target" ];
   };
 
   # 2. Gestor de pausa (detecta CUALQUIER fullscreen en KWin)
@@ -50,6 +50,6 @@ in
       Restart = "always";
       RestartSec = 3;
     };
-    installConfig.WantedBy = [ "graphical-session.target" ];
+    wantedBy = [ "graphical-session.target" ];
   };
 }
