@@ -14,7 +14,7 @@
       modules = [
         ./nixos/configuration.nix                     #config base limpia
         ./nixos/modules/gaming/gaming.nix             #nueva expecializacion
-          ./nixos/modules/desktop/video-wallpaper.nix #video wallpaper
+       #   ./nixos/modules/desktop/video-wallpaper.nix #video wallpaper
       ];
     };
 
