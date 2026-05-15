@@ -7,7 +7,7 @@
     ./modules/openclaw
     ./modules/dev-agent
     ./modules/kairos-proxy
-    ./modules/jail-utils.nix
+    #./modules/jail-utils.nix
     ./modules/ai-acceleration.nix
 
   ];
