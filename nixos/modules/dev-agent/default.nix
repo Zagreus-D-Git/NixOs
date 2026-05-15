@@ -1,7 +1,7 @@
 # ~/nixos-config/nixos/modules/dev-agent/default.nix
 { pkgs, lib, ... }:
 let
-  jail = import ../pentest/jail-utils.nix { inherit pkgs lib; };
+  jail = import ../jail-utils.nix { inherit pkgs lib; };
   kbPath = "/home/zagreus/nixos-config/kb";
   workspacePath = "/home/zagreus/dev-agent-workspace";
 
