@@ -25,7 +25,7 @@
     ];
 
     # GARANTÍA de no compilar:
-    max-jobs = 0; # 0 = solo descarga, si no hay binario falla en vez de compilar
+    #max-jobs = 0; # 0 = solo descarga, si no hay binario falla en vez de compilar
     builders-use-substitutes = true;
 
     auto-optimise-store = true;   # deduplica en cada build
