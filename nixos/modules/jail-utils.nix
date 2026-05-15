@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs, lib, ... }:
 let bwrap = "${pkgs.bubblewrap}/bin/bwrap";
 in {
   mkJail = { name, packages, workspace, allowNet ? true, allowGPU ? false, allowWiFi ? false, extraBinds ? [], allowGUI ? false }:
