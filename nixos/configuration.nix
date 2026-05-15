@@ -14,12 +14,14 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org" # CUDA precompilado
+        "https://cache.nixos.org/"
+        "https://nix-community.cachix.org/"
+        "https://cache.nixos-cuda.org/" # cuda compiled verificada
     ];
     trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZBuZc3DkeT6xjo="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkrJ16ZJo1..."
+      "nix-community.cachix.org-1:mB9F..."
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
     ];
     auto-optimise-store = true;   # deduplica en cada build
     min-free = 5 * 1024 * 1024 * 1024;   # 5 GiB libres mínimo en disco
