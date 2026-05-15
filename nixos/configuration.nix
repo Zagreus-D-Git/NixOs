@@ -24,10 +24,6 @@
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
     ];
 
-    # GARANTÍA de no compilar:
-    #max-jobs = 0; # 0 = solo descarga, si no hay binario falla en vez de compilar
-    builders-use-substitutes = true;
-
     auto-optimise-store = true;   # deduplica en cada build
     min-free = 5 * 1024 * 1024 * 1024;   # 5 GiB libres mínimo en disco
     max-free = 10 * 1024 * 1024 * 1024;  # intenta dejar 10 GiB libres
