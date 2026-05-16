@@ -3,12 +3,10 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/pentest
     ./modules/openclaw
-    ./modules/dev-agent
     ./modules/kairos-proxy
-    #./modules/jail-utils.nix
     ./modules/ai-acceleration.nix
+    ./modules/agents.nix
 
   ];
 
@@ -97,6 +95,12 @@
   hardware.nvidia-container-toolkit.enable = true;
 
   services.kairos-proxy.enable = true;
+
+  services.kairologic.agents = {
+  enable = true;
+  dev.enable = true;
+  data.enable = true; # set false if you want only dev for now
+};
 
   services.pipewire = { enable = true; alsa.enable = true; alsa.support32Bit = true; pulse.enable = true; };
   security.rtkit.enable = true;
