@@ -1,6 +1,8 @@
-{ pkgs, lib, ... }:
-let bwrap = "${pkgs.bubblewrap}/bin/bwrap";
-in {
+{ pkgs, lib }:
+let
+  bwrap = "${pkgs.bubblewrap}/bin/bwrap";
+in
+{
   mkJail = { name, packages, workspace, allowNet ? true, allowGPU ? false, allowWiFi ? false, extraBinds ? [], allowGUI ? false }:
     let env = pkgs.buildEnv { name = "${name}-env"; paths = packages; };
     in pkgs.writeShellScriptBin name ''
@@ -16,7 +18,7 @@ in {
         --ro-bind ${pkgs.writeText "passwd" "jailer:x:1000:1000::/home/jailer:/bin/bash\n"} /etc/passwd \
         --ro-bind ${pkgs.writeText "group" "jailer:x:1000:\n"} /etc/group \
         ${lib.optionalString allowNet "--ro-bind /etc/resolv.conf /etc/resolv.conf"} \
-        ${lib.optionalString allowNet "--ro-bind /etc/hosts /etc/hosts"} \
+        ${lib.optionalString allowNet "--ro-bind /etc/hosts"} \
         ${lib.optionalString allowNet "--share-net"} \
         ${lib.optionalString (!allowNet) "--unshare-net"} \
         --bind ${workspace} /workspace \
