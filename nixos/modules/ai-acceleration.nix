@@ -2,6 +2,7 @@
 
 {
   nix.settings = {
+  experimental-features = [ "nix-command" "flakes" ];
     # --- Cachés Binarios (Evita compilar CUDA) ---
     substituters = [
       "https://cache.nixos.org"
@@ -14,6 +15,9 @@
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
     ];
 
+    # Authorize your user profile to pass substitution channels to the nix-daemon
+    trusted-users = [ "root" "zagreus" ];
+
     # --- Optimización de Almacenamiento (Tus OBS) ---
     auto-optimise-store = true;
     min-free = 5 * 1024 * 1024 * 1024;  # 5 GiB
@@ -21,6 +25,8 @@
     keep-outputs = false;
     keep-derivations = false;
   };
+
+  nixpkgs.config.allowUnfree = true;
 
   # --- Gestión Automática de Licencias ---
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [

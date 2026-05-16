@@ -20,3 +20,4 @@ __pycache__/
 *.log
 .flake.nix.swp
 nixos/.venv-agent/
+.aider*
