@@ -90,7 +90,7 @@
     host = "127.0.0.1"; # solo local
     port = 11434;
   };
-  services.openclaw.enable = true; # desactivado hasta proveer paquete
+  services.openclaw.enable = true;
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
