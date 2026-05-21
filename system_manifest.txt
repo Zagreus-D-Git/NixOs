@@ -1,0 +1,93 @@
+=== SYSTEM TREE LAYOUT ===
+.
+./flake.lock
+./kb
+./kb/projects
+./kb/projects/Kairologic_LLM_Agentic_Lab_Brief.md
+./kb/projects/test-fib.md
+./kb/raw
+./kb/raw/The Twelve Houses PDF.pdf
+./kb/raw/claude_gpt_kairo_context.md
+./kb/raw/Holistic Tarot An Integrative Approach.pdf
+./kb/raw/Appendix_Chat_Brief_2026-04-21.md
+./kb/raw/org tree.txt
+./kb/raw/summarized.txt
+./kb/raw/next step llm lab.md
+./kb/raw/Project Brief & Current Status.md
+./kb/raw/maintenance.md
+./kb/raw/NixOS Manual - Appendix A. Configuration Options.pdf
+./kb/raw/Meta-AI chat context n mess-up.txt
+./kb/raw/NixOS Manual.pdf
+./kb/raw/promptoriaV2-complex-problem.txt
+./kb/rss
+./kb/rss/news-2026-05-11.xml
+./kb/rss/news-2026-04-20.xml
+./kb/rss/news-2026-05-12.xml
+./kb/rss/news-2026-04-21.xml
+./kb/rss/news-2026-05-03.xml
+./kb/rss/news-2026-05-05.xml
+./kb/rss/news-2026-05-06.xml
+./kb/rss/news-2026-05-10.xml
+./kb/rss/news-2026-04-22.xml
+./kb/rss/news-2026-05-14.xml
+./kb/rss/news-2026-05-15.xml
+./kb/rss/news-2026-05-13.xml
+./kb/tools
+./kb/tools/vectoryze.py
+./kb/tools/git-rebuild-deploy.sh
+./kb/tools/ingest-pdf.sh
+./kb/wordlists
+./kb/exploits
+./kb/embeddings
+./kb/embeddings/chroma
+./kb/cves
+./kb/docs
+./dev
+./system_manifest.txt
+./result
+./kb_manifest.txt
+./flake.nix
+./specs
+./specs/constitution
+./specs/features
+./specs/features/01_local_agent_test
+./nixos
+./nixos/hardware-configuration.nix
+./nixos/configuration.nix
+./nixos/modules
+./nixos/modules/gaming
+./nixos/modules/openclaw
+./nixos/modules/ai-acceleration.nix
+./nixos/modules/llm-lab.nix
+./nixos/modules/agents.nix
+./nixos/modules/desktop
+./nixos/modules/kairos-proxy
+./nixos/lib
+./nixos/lib/jail-utils.nix
+
+=== ACTIVE FLAKE DEFINITION ===
+{
+  description = "Vivobook unified";
+
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs = { self, nixpkgs }:
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
+    devShells = import ./nixos/modules/llm-lab.nix { inherit pkgs; };
+  in {
+    nixosConfigurations.vivobook-lab = nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        ./nixos/configuration.nix                     #config base limpia
+        ./nixos/modules/gaming/gaming.nix             #nueva expecializacion
+       #   ./nixos/modules/desktop/video-wallpaper.nix #video wallpaper
+      ];
+    };
+
+    devShells.${system} = devShells;
+  };
+}
+
+=== AGENT ENVIRONMENT MODULE ===
