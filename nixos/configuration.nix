@@ -7,7 +7,7 @@
     ./modules/kairos-proxy
     ./modules/ai-acceleration.nix
     ./modules/agents.nix
-    ./modules/open-webui
+    ./modules/open-webui.nix
 
   ];
 
