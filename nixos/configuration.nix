@@ -7,6 +7,7 @@
     ./modules/kairos-proxy
     ./modules/ai-acceleration.nix
     ./modules/agents.nix
+    ./modules/open-webui
 
   ];
 
@@ -101,6 +102,8 @@
   dev.enable = true;
   data.enable = true; # set false if you want only dev for now
 };
+
+  services.open-webui.enable = true;
 
   services.pipewire = { enable = true; alsa.enable = true; alsa.support32Bit = true; pulse.enable = true; };
   security.rtkit.enable = true;
